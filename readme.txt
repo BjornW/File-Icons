@@ -2,8 +2,8 @@
 Contributors: BjornW
 Tags: links, files, icons, regex, css, regular expressions, style 
 Requires at least: 3.x
-Tested up to: 3.3.1
-Stable tag: 3.3.1
+Tested up to: 3.2.1
+Stable tag: 3.0
 
 Easily add icons to links, files and downloads using CSS classes, regular expressions and an image sprite
 
@@ -40,13 +40,14 @@ The File-Icons plugin uses the WordPress contextual help to provide documentatio
 You may access the documentation in the File Icons settings (Settings -> File Icons) 
 by pressing the 'help' button in the top-right corner.
 
+
 == Screenshots ==
 
 no screenshots yet
 
 == Changelog ==
 
-= 3.2.1 =
+= 3.0 =
 BjornW took over development and completely rewrote plugin using a different approach, 
 which is based on CSS sprites and regular expression. 
 NOTE: This release is NOT backwards compatible with the previous versions.
@@ -56,7 +57,7 @@ Last release by wpdprx.
 
 == Upgrade Notice ==
 
-= 3.2.1 is a complete rewrite be careful when updating =
+= 3.0 is a complete rewrite be careful when updating =
 BjornW took over development and completely rewrote plugin using a different approach, 
 which is based on CSS sprites and regular expression. 
 NOTE: This release is NOT backwards compatible with the previous version.
