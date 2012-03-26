@@ -4,7 +4,7 @@ Plugin Name: File Icons
 Plugin URI: http://www.burobjorn.nl
 Description: Add icons to links, files and downloads using CSS classes & regular expressions
 Author: Bjorn Wijers <burobjorn at burobjorn dot nl> 
-Version: 3.2.1
+Version: 3.0
 Author URI: http://www.burobjorn.nl
 *******************************************************************************/   
    
@@ -156,7 +156,7 @@ if ( ! class_exists('FileIcons')) {
       // don't forget to set up the default options
       if ( ! $the_options = get_option( $this->options_name) ) {
         $the_options = array(
-          'version' => '3.2.1',
+          'version' => '3.0',
           'icons'   => $this->get_default_icons(),
           'css'     => '',
           'sprite'  => ''  
