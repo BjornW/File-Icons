@@ -94,9 +94,6 @@ if ( ! class_exists('FileIcons')) {
 
       add_filter( 'contextual_help', array(&$this, 'add_context_help'), 10, 3);
 
-      //@todo fix this to make it conditional
-      add_action( 'admin_print_scripts', array(&$this, 'admin_scripts') );
-      add_action( 'admin_print_styles', array(&$this, 'admin_styles') );
       add_action( 'wp_enqueue_scripts', array(&$this, 'custom_style') );
     }
 
@@ -188,6 +185,7 @@ if ( ! class_exists('FileIcons')) {
     {
       $this->context_page = add_options_page('File Icons', 'File Icons', 'manage_options', basename(__FILE__), array(&$this,'admin_options_page'));
       add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array(&$this, 'filter_plugin_actions'), 'manage_options', 2 );
+      add_action('admin_print_styles-' . $this->context_page, array(&$this, 'admin_scripts_styles') );
     }
     
     /**
@@ -356,7 +354,8 @@ if ( ! class_exists('FileIcons')) {
       $html .= "<input type='hidden' name='fi_action' value='reset' />";
       $html .= "<input type='submit' name='fi_reset' value='" . __('Reset all settings to defaults', $this->localization_domain) . "'/>\n";
       $html .= "</form><br />\n";
-      
+
+      /*
       $html .= "<h2>" . __('Extra options (Experimental!)') . "</h2>\n";
       $html .= "<form method='post' id='fi_extra'>";
       $html .= wp_nonce_field('fi-extra', $name = 'fi_extra_wpnonce', $referer = true, $echo = false);
@@ -370,7 +369,7 @@ if ( ! class_exists('FileIcons')) {
       $html .= "<input type='hidden' name='fi_action' value='extra' />";
       $html .= "<input type='submit' name='fi_save_extra_options' value='" . __('Save extra options', $this->localization_domain) . "'/>\n";
       $html .= "</form><br />\n";
-      
+       */
 
       if( $echo ) {
         echo $html;
@@ -489,18 +488,17 @@ if ( ! class_exists('FileIcons')) {
       return extension_loaded('dom');
     }
 
-    function admin_scripts() 
+    function admin_scripts_styles() 
     {
       wp_enqueue_script('media-upload');
       wp_enqueue_script('thickbox');
-      wp_register_script('file-icons-upload', $this->plugin_url .'/js/file-icons.js', array('jquery','media-upload','thickbox'));
+      wp_enqueue_style('thickbox');
+      
+      wp_register_script('file-icons-upload', $this->plugin_url .'js/file-icons.js', array('jquery','media-upload','thickbox'));
       wp_enqueue_script('file-icons-upload');
+      
     }
 
-    function admin_styles() 
-    {
-      wp_enqueue_style('thickbox');
-    }
 
     
     function custom_style() 
