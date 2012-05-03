@@ -3,7 +3,7 @@ Contributors: BjornW
 Tags: links, files, icons, regex, css, regular expressions, style 
 Requires at least: 3.x
 Tested up to: 3.2.1
-Stable tag: 3.0bd
+Stable tag: trunk
 
 Easily add icons to links, files and downloads using CSS classes, regular expressions and an image sprite
 
