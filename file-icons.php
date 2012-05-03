@@ -399,7 +399,12 @@ if ( ! class_exists('FileIcons')) {
 
       $id  = ( is_multisite() ) ? 1 : null; 
       $url = get_site_url($id);
+
+      // make sure regex metacharacters are escaped
+      $url = preg_quote($url, '/');
       
+
+
       $icons[] = array( 'type' => 'Internal link', 'class' => 'icon internal', 'regex' => "/^$url/i" );
       
       return $icons;
