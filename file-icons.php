@@ -442,7 +442,10 @@ if ( ! class_exists('FileIcons')) {
               }      
             }
           }
-          $content = $dom->saveHTML();
+          // return the processed content, but first remove unwanted extra 
+          // added html doctype and tags by braindead php
+          // Thanks: http://nl.php.net/manual/en/domdocument.savehtml.php#85165  
+          $content = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace( array('<html>', '</html>', '<body>', '</body>'), array('', '', '', ''), $dom->saveHTML()));
         }
       }
       return $content;  
