@@ -419,14 +419,26 @@ if ( ! class_exists('FileIcons')) {
 
     // either use the_content filter function and transform text before output or
     // add classes to the content upon saving or editing data??
-
-
     function add_css_classes_to_content( $content )
     {
       // make sure the content is not empty and contains a link
       if( ! empty($content) && stristr( $content, 'href' ) !== false ) {
         $dom = new DOMDocument;
-        if( $dom->loadHTML( $content ) ) {
+        // Use a dirty trick to make PHP DOM behave with utf-8 content.
+        // Apperently DOM defaults to Latin1 when no metatag is found and it
+        // ignores setting the encoding. This is a workaround which should
+        // prevent from displaying 'weird' characters to the users.
+        // It forces DOM to treat the loaded html file as a utf-8 encoded xml
+        // file, removes the added xml encoding node and sets the encoding to
+        // utf-8.
+        // Thanks: http://www.php.net/manual/en/domdocument.loadhtml.php#95251
+        if( $dom->loadHTML( '<?xml encoding="UTF-8">' . $content ) ) {
+          foreach( $dom->childNodes as $childNode ){
+            if($childNode->nodeType == XML_PI_NODE){
+              $dom->removeChild($childNode); // remove prev set xml utf-8 encoding
+            }
+          }
+          $dom->encoding = 'UTF-8'; // set the encoding properly
           $links = $dom->getElementsByTagName('a');
           foreach ($links as $l) {
             if( is_object($l) ) {
