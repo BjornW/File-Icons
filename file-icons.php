@@ -391,13 +391,25 @@ if ( ! class_exists('FileIcons')) {
       $icons = array();
 
       $icons[] = array( 'type' => 'Excel',      'class' => 'icon excelfile',  'regex' => '/\.xls$/i' );
+      $icons[] = array( 'type' => 'Excel2007'   'class' => 'icon excelfile',  'regex' => '/\.xlsx$/i' );
+
       $icons[] = array( 'type' => 'Word',       'class' => 'icon worddoc',    'regex' => '/\.doc$/i' );
-      $icons[] = array( 'type' => 'PDF',        'class' => 'icon pdf',        'regex' => '/\.pdf$/i' );
+      $icons[] = array( 'type' => 'Word2007',   'class' => 'icon worddoc',    'regex' => '/\.docx$/i' );
+      
       $icons[] = array( 'type' => 'PowerPoint', 'class' => 'icon ppt-file',   'regex' => '/\.ppt$/i' );
+      $icons[] = array( 'type' => 'PowerPoint2007', 'class' => 'icon ppt-file',   'regex' => '/\.pptx$/i' );
+      
+      $icons[] = array( 'type' => 'PDF',        'class' => 'icon pdf',        'regex' => '/\.pdf$/i' );
       $icons[] = array( 'type' => 'HTML',       'class' => 'icon html-page',  'regex' => '/\.html$/i' );
 
-      $icons[] = array( 'type' => 'Audio',      'class' => 'icon audio',      'regex' => '/\.mp3/i' );
-      $icons[] = array( 'type' => 'Video',      'class' => 'icon play',       'regex' => '/\.mp4/i' );
+      $icons[] = array( 'type' => 'Audio-mp3',  'class' => 'icon audio',      'regex' => '/\.mp3/i' );
+      $icons[] = array( 'type' => 'Audio-wav',  'class' => 'icon audio',      'regex' => '/\.wav/i' );
+      $icons[] = array( 'type' => 'Audio-ogg',  'class' => 'icon audio',      'regex' => '/\.ogg/i' );
+      
+      $icons[] = array( 'type' => 'Video-mp4',  'class' => 'icon play',       'regex' => '/\.mp4/i' );
+      $icons[] = array( 'type' => 'Video-mov',  'class' => 'icon play',       'regex' => '/\.mov/i' );
+      $icons[] = array( 'type' => 'Video-3gp',  'class' => 'icon play',       'regex' => '/\.3gp/i' );
+      $icons[] = array( 'type' => 'Video-wmv',  'class' => 'icon play',       'regex' => '/\.wmv/i' );
 
 
       $icons[] = array( 'type' => 'Email link', 'class' => 'icon email', 'regex' => '/^mailto/i' );
