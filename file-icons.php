@@ -423,7 +423,6 @@ if ( ! class_exists('FileIcons')) {
 
 
 
-      $icons[] = array( 'type' => 'Internal link', 'class' => 'icon internal', 'regex' => "/^$url/i" );
 
       return $icons;
     }
