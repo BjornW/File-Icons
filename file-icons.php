@@ -391,7 +391,7 @@ if ( ! class_exists('FileIcons')) {
       $icons = array();
 
       $icons[] = array( 'type' => 'Excel',      'class' => 'icon excelfile',  'regex' => '/\.xls$/i' );
-      $icons[] = array( 'type' => 'Excel2007'   'class' => 'icon excelfile',  'regex' => '/\.xlsx$/i' );
+      $icons[] = array( 'type' => 'Excel2007',   'class' => 'icon excelfile',  'regex' => '/\.xlsx$/i' );
 
       $icons[] = array( 'type' => 'Word',       'class' => 'icon worddoc',    'regex' => '/\.doc$/i' );
       $icons[] = array( 'type' => 'Word2007',   'class' => 'icon worddoc',    'regex' => '/\.docx$/i' );
