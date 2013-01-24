@@ -400,7 +400,6 @@ if ( ! class_exists('FileIcons')) {
       $icons[] = array( 'type' => 'PowerPoint2007', 'class' => 'icon ppt-file',   'regex' => '/\.pptx$/i' );
       
       $icons[] = array( 'type' => 'PDF',        'class' => 'icon pdf',        'regex' => '/\.pdf$/i' );
-      $icons[] = array( 'type' => 'HTML',       'class' => 'icon html-page',  'regex' => '/\.html$/i' );
 
       $icons[] = array( 'type' => 'Audio-mp3',  'class' => 'icon audio',      'regex' => '/\.mp3/i' );
       $icons[] = array( 'type' => 'Audio-wav',  'class' => 'icon audio',      'regex' => '/\.wav/i' );
