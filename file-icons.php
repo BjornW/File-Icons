@@ -433,6 +433,8 @@ if ( ! class_exists('FileIcons')) {
     {
       // make sure the content is not empty and contains a link
       if( ! empty($content) && stristr( $content, 'href' ) !== false ) {
+        // prevent errors of malformed html show up in errorlogs
+        libxml_use_internal_errors(true);
         $dom = new DOMDocument;
         // Use a dirty trick to make PHP DOM behave with utf-8 content.
         // Apperently DOM defaults to Latin1 when no metatag is found and it
