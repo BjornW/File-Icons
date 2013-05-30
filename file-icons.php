@@ -4,7 +4,7 @@ Plugin Name: File Icons
 Plugin URI: http://www.burobjorn.nl
 Description: Add icons to links, files and downloads using CSS classes & regular expressions
 Author: Bjorn Wijers <burobjorn at burobjorn dot nl>
-Version: 3.0bd
+Version: 3.1
 Author URI: http://www.burobjorn.nl
 *******************************************************************************/
 
@@ -455,20 +455,23 @@ if ( ! class_exists('FileIcons')) {
           foreach ($links as $l) {
             if( is_object($l) ) {
               $url = ( $l->hasAttribute('href') ) ? $l->getAttribute('href') : null;
-              if( $icon_class = $this->has_icon( $url ) ) {
-                if( $l->hasAttribute( 'class' ) ) {
-                  $existing_class = $l->getAttribute('class');
-                  $existing_classes = explode(' ', $existing_class);
-                  $existing_classes = is_array($existing_classes) ? $existing_classes : array($existing_class);
+              // if node has no kids or kids allowing icons, then proceed...
+              if( ($l->hasChildNodes() === false) || $this->has_kids_allowing_icons( $l ) ) { 
+                if( $icon_class = $this->has_icon( $url ) ) {
+                  if( $l->hasAttribute( 'class' ) ) {
+                    $existing_class = $l->getAttribute('class');
+                    $existing_classes = explode(' ', $existing_class);
+                    $existing_classes = is_array($existing_classes) ? $existing_classes : array($existing_class);
 
-                  $new_classes = explode(' ', $icon_class);
-                  $new_classes = is_array($new_classes) ? $new_classes : array($new_classes);
+                    $new_classes = explode(' ', $icon_class);
+                    $new_classes = is_array($new_classes) ? $new_classes : array($new_classes);
 
-                  $combined_classes = array_merge($existing_classes, $new_classes);
+                    $combined_classes = array_merge($existing_classes, $new_classes);
 
-                  $icon_class = implode(' ', $combined_classes);
+                    $icon_class = implode(' ', $combined_classes);
+                  }
+                  $l->setAttribute('class', $icon_class);
                 }
-                $l->setAttribute('class', $icon_class);
               }
             }
           }
@@ -497,6 +500,45 @@ if ( ! class_exists('FileIcons')) {
       return;
     }
 
+
+    /** 
+     * Check if the element which should display an icon has child nodes 
+     * which imply an icon is not needed. For example:
+     * 
+     * <a href="http://domain.ext/more-information.pdf">
+     *   <img src="less-information.jpg" alt="simple diagram" />
+     * </a>    
+     * 
+     * The above example displays an image which links to a pdf. In this case 
+     * an icon would not be necessary. Keep in mind the node element can have 
+     * multiple childnodes, but only one is needed to prevent an icon class from 
+     * being added.
+     *
+     * @param DOMNode 
+     * @return bool false upon finding at least one ChildNode belonging to the 
+     * array with html tags which should not display an icon. Otherwise true. 
+     * false 
+     */
+    function has_kids_allowing_icons( $node )
+    {
+      // html tags which should not display an icon 
+      $no_icon_needed_tags = array('img', 'video', 'object', 'embed');
+
+      if( is_object($node) ) {
+        if( $node->hasChildNodes() ) {
+          foreach($node->childNodes as $child) {
+            if( isset($child->tagName) ) {
+              if( in_array($child->tagName, $no_icon_needed_tags) ) {
+                return false;
+              }
+            } 
+          }  
+          return true;
+        }
+        return true; 
+      }
+      return true;
+    }
 
 
 

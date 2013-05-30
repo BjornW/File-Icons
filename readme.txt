@@ -52,14 +52,20 @@ BjornW took over development and completely rewrote plugin using a different app
 which is based on CSS sprites and regular expression. 
 NOTE: This release is NOT backwards compatible with the previous versions.
 
+= 3.1 = 
+If a link contains an image, video, object or embed tag there will be no icon class added to the link. 
+This prevents an unwanted side-effect of having an image/video/object/embed linking to a file so an icon is not
+needed anymore.
+
+
 = 2.2.1 =
 Last release by wpdprx.
 
 == Upgrade Notice ==
 
-= 3.0 is a complete rewrite be careful when updating =
+= From version 3.x and upwards: the plugin has seen a complete rewrite be careful when updating =
 BjornW took over development and completely rewrote plugin using a different approach, 
 which is based on CSS sprites and regular expression. 
-NOTE: This release is NOT backwards compatible with the previous version.
+NOTE: Releases 3.x and upwards are NOT backwards compatible with the previous version.
 
 
