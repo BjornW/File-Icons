@@ -177,6 +177,8 @@ if ( ! class_exists('FileIcons')) {
     */
     function save_admin_options()
     {
+
+
       return update_option($this->options_name, $this->options);
     }
 
@@ -207,6 +209,42 @@ if ( ! class_exists('FileIcons')) {
       $settings_link = '<a href="options-general.php?page=' . basename(__FILE__) . '">' . __('Settings') . '</a>';
       array_unshift( $links, $settings_link ); // before other links
       return $links;
+    }
+
+    /** 
+     * Test if a regular expression is a valid regex and does not throw any 
+     * errors. We use the regex on a null variable. If it return false the 
+     * regex is not valid, otherwise the regex is valid. However keep in mind 
+     * this does NOT mean the regex will yield any result.
+     */
+    function is_a_valid_regex( $regex )
+    {
+      if( preg_match( $regex, null ) !== false) {
+        return true;
+      }
+      return false;
+    }
+
+    function _pre_save_options_check() {
+      $result = array('is_ok' => true, 'msg' =>'Options saved!');
+      if( is_array($this->options) && array_key_exists('icons', $this->options) ) {
+        if( is_array( $this->options['icons'] ) && sizeof($this->options['icons']) > 0 ){
+          foreach($this->options['icons'] as $icon) {
+            if( is_array( $icon ) && array_key_exists('regex', $icon) ) {
+              if( empty( $icon['regex'] ) ) {
+                $result['is_ok'] = false;
+                $result['msg']   = __('Options not saved! Found at least one empty regular expression, please fix this', $this->localization_domain );
+                return $result;
+              } elseif( ! $this->is_a_valid_regex( $icon['regex'] ) ) {
+                $result['is_ok'] = false;
+                $result['msg']   = __('Options not saved! Found at least one invalid regular expression, please fix this', $this->localization_domain );
+                return $result;
+              } 
+            }
+          }
+        }
+      }
+      return $result['is_ok'] = true; 
     }
 
     /**
@@ -248,8 +286,12 @@ if ( ! class_exists('FileIcons')) {
             $msg = __('Reset to default settings', $this->localization_domain);
           break;
         }
-        $this->save_admin_options();
-        $html = "<div class='updated'><p>$msg</p></div>";
+        $result = $this->save_admin_options();
+        if( is_array($result) && array_key_exists('msg', $result ) ) { 
+          $msg .= '<br />' . $result['msg'];
+          $class = ( array_key_exists('is_ok', $result) && $result['is_ok'] === true) ? 'updated' : 'error';
+          $html = "<div class='$class'><p>$msg</p></div>";
+        }
       }
 
       // build the options page
@@ -413,15 +455,6 @@ if ( ! class_exists('FileIcons')) {
 
       $icons[] = array( 'type' => 'Email link', 'class' => 'icon email', 'regex' => '/^mailto/i' );
       $icons[] = array( 'type' => 'Tag link',   'class' => 'icon tag',    'regex' => '/\/tag\//i' );
-
-      $id  = ( is_multisite() ) ? 1 : null;
-      $url = get_site_url($id);
-
-      // make sure regex metacharacters are escaped
-      $url = preg_quote($url, '/');
-
-
-
 
       return $icons;
     }
