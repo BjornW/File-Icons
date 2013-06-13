@@ -47,16 +47,20 @@ no screenshots yet
 
 == Changelog ==
 
-= 3.0 =
-BjornW took over development and completely rewrote plugin using a different approach, 
-which is based on CSS sprites and regular expression. 
-NOTE: This release is NOT backwards compatible with the previous versions.
+= 3.2 = 
+Added code to make sure a regex added by a user is not empty or invalid. 
+If a regex is invalid the user is warned and asked to fix it or remove the regex.
+These tests are done during the saving of the plugin options
 
 = 3.1 = 
 If a link contains an image, video, object or embed tag there will be no icon class added to the link. 
 This prevents an unwanted side-effect of having an image/video/object/embed linking to a file so an icon is not
 needed anymore.
 
+= 3.0 =
+BjornW took over development and completely rewrote plugin using a different approach, 
+which is based on CSS sprites and regular expression. 
+NOTE: This release is NOT backwards compatible with the previous versions.
 
 = 2.2.1 =
 Last release by wpdprx.
