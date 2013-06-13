@@ -4,7 +4,7 @@ Plugin Name: File Icons
 Plugin URI: http://www.burobjorn.nl
 Description: Add icons to links, files and downloads using CSS classes & regular expressions
 Author: Bjorn Wijers <burobjorn at burobjorn dot nl>
-Version: 3.1
+Version: 3.2
 Author URI: http://www.burobjorn.nl
 *******************************************************************************/
 
