@@ -28,6 +28,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 if ( ! class_exists('FileIcons')) {
   class FileIcons {
+    
+    /** 
+     * @var array with the failed regexes since the last save
+     */  
+    var $failed_regex = array();
 
     /**
      * @var string The options string name for this plugin
@@ -177,9 +182,15 @@ if ( ! class_exists('FileIcons')) {
     */
     function save_admin_options()
     {
-
-
-      return update_option($this->options_name, $this->options);
+      $this->failed_regex = array(); // make empty before checking
+      $pre_check = $this->_pre_save_options_check();
+      if( is_array($pre_check) && array_key_exists('is_ok', $pre_check) ) {
+        if( $pre_check['is_ok'] === true ) {
+          $result = update_option($this->options_name, $this->options);
+          return $result;
+        }  
+      }  
+      return $pre_check;
     }
 
     /**
@@ -215,16 +226,26 @@ if ( ! class_exists('FileIcons')) {
      * Test if a regular expression is a valid regex and does not throw any 
      * errors. We use the regex on a null variable. If it return false the 
      * regex is not valid, otherwise the regex is valid. However keep in mind 
-     * this does NOT mean the regex will yield any result.
+     * this does NOT mean the regex will yield any result. Thanks to 
+     * StackOverflow: http://stackoverflow.com/questions/4440626/how-can-i-validate-regex
+     *
+     * Note: I explicitly suppress any warnings or errors while checking using 
+     * the @ symbol
+     *
      */
     function is_a_valid_regex( $regex )
     {
-      if( preg_match( $regex, null ) !== false) {
+      if( @preg_match( $regex, null ) !== false) {
         return true;
       }
       return false;
     }
 
+
+    /** 
+     * Before saving options do some checks, like checking if a regex is  
+     * empty or uses a invalid regex
+     */ 
     function _pre_save_options_check() {
       $result = array('is_ok' => true, 'msg' =>'Options saved!');
       if( is_array($this->options) && array_key_exists('icons', $this->options) ) {
@@ -233,19 +254,22 @@ if ( ! class_exists('FileIcons')) {
             if( is_array( $icon ) && array_key_exists('regex', $icon) ) {
               if( empty( $icon['regex'] ) ) {
                 $result['is_ok'] = false;
-                $result['msg']   = __('Options not saved! Found at least one empty regular expression, please fix this', $this->localization_domain );
+                $result['msg']   = __('Options not saved! Found at least one empty regular expression, please fix this or remove it.', $this->localization_domain );
+                $this->failed_regex[] = $icon['type']; 
                 return $result;
               } elseif( ! $this->is_a_valid_regex( $icon['regex'] ) ) {
                 $result['is_ok'] = false;
-                $result['msg']   = __('Options not saved! Found at least one invalid regular expression, please fix this', $this->localization_domain );
+                $result['msg']   = __('Options not saved! Found at least one invalid regular expression, please fix this or remove it.', $this->localization_domain );
+                $this->failed_regex[] = $icon['type'];
                 return $result;
               } 
             }
           }
         }
       }
-      return $result['is_ok'] = true; 
+      return $result; 
     }
+
 
     /**
     * Adds settings/options page
@@ -287,11 +311,13 @@ if ( ! class_exists('FileIcons')) {
           break;
         }
         $result = $this->save_admin_options();
+        $class  = 'updated'; 
+        
         if( is_array($result) && array_key_exists('msg', $result ) ) { 
-          $msg .= '<br />' . $result['msg'];
-          $class = ( array_key_exists('is_ok', $result) && $result['is_ok'] === true) ? 'updated' : 'error';
-          $html = "<div class='$class'><p>$msg</p></div>";
+          $msg   = $result['msg'];
+          $class = 'error';
         }
+        $html = "<div class='$class'><p>$msg</p></div>";
       }
 
       // build the options page
@@ -367,10 +393,12 @@ if ( ! class_exists('FileIcons')) {
         foreach($icons as $icon) {
           if( is_array($icon) ) {
             $html .= "<tr valign='top'>\n";
-            $html .= "\t<td><input type='text' maxlength='75' name='icons[$i][type]'  value='" .  $icon['type'] . "' /></td>\n";
-            $html .= "\t<td><input type='text' maxlength='75' name='icons[$i][class]' value='" .  $icon['class'] . "' /></td>\n";
-            $html .= "\t<td><input type='text' maxlength='75' name='icons[$i][regex]' value='" .  $icon['regex'] . "' /></td>\n";
-            $html .= "\t<td><input type='checkbox' id='removal_chbx$i' name='icons[$i][remove] value='true' /></td>\n";
+            $style ='';
+            $style = ( in_array( $icon['type'], $this->failed_regex) ) ? "style='border: 1px solid red;'" : '';
+            $html .= "\t<td><input type='text' $style maxlength='75' name='icons[$i][type]'  value='" .  $icon['type'] . "' /></td>\n";
+            $html .= "\t<td><input type='text' $style maxlength='75' name='icons[$i][class]' value='" .  $icon['class'] . "' /></td>\n";
+            $html .= "\t<td><input type='text' $style maxlength='75' name='icons[$i][regex]' value='" .  $icon['regex'] . "' /></td>\n";
+            $html .= "\t<td><input type='checkbox' $style id='removal_chbx$i' name='icons[$i][remove] value='true' /></td>\n";
             $html .= "</tr>\n";
             $i++;
           }
