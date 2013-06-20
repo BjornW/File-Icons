@@ -2,7 +2,7 @@
 Contributors: BjornW
 Tags: links, files, icons, regex, css, regular expressions, style 
 Requires at least: 3.x
-Tested up to: 3.2.1
+Tested up to: 3.4.2
 Stable tag: trunk
 
 Easily add icons to links, files and downloads using CSS classes, regular expressions and an image sprite
@@ -46,6 +46,14 @@ by pressing the 'help' button in the top-right corner.
 no screenshots yet
 
 == Changelog ==
+
+= 3.2.1 =
+Added filter: 'file_icons_add_css_classes' so other plugins or themes may use the 
+file-icons plugin functionality. It allows you to filter your content for file-icon links
+just as the plugin currently does. Thanks Roy Tanck for this suggestion.
+
+Changed the tested up to to 3.4.2 which I previously forgot to change.
+
 
 = 3.2 = 
 Added code to make sure a regex added by a user is not empty or invalid. 
